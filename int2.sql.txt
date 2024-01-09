@@ -1,0 +1,9 @@
+
+.mode columns
+.headers on
+.nullvalue NULL
+
+SELECT CoachingStaff.nome, Equipa.nome
+FROM CoachingStaff, Equipa
+WHERE CoachingStaff.idEquipa = Equipa.idEquipa
+AND Equipa.localizacao = 'Los Angeles';

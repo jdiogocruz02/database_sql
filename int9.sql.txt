@@ -1,0 +1,8 @@
+
+
+
+
+SELECT razao, count(*) as contagem  
+FROM Pausa
+GROUP BY razao
+ORDER BY contagem DESC;

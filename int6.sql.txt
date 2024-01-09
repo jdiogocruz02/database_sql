@@ -1,0 +1,8 @@
+
+.mode columns
+.headers on
+.nullvalue NULL
+
+SELECT count(*) as numerodejogos
+FROM Calendario
+WHERE ComentatorCast = 'Medic e Caedrel';

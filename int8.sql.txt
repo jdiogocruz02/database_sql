@@ -1,0 +1,6 @@
+
+
+SELECT nacionalidade, count(*) AS quantia
+FROM Jogador 
+GROUP BY nacionalidade
+ORDER BY quantia ASC;

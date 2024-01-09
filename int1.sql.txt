@@ -1,0 +1,6 @@
+
+.mode columns
+.headers on
+.nullvalue NULL
+
+SELECT nome,min(idade) FROM CoachingStaff;

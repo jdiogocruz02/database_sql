@@ -1,0 +1,6 @@
+
+.headers on
+
+SELECT nome, max(idade) as idade
+FROM Jogador
+WHERE lane = 'Mid';

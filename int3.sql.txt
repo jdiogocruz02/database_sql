@@ -1,0 +1,7 @@
+
+
+.mode columns
+.headers on
+.nullvalue NULL
+
+SELECT avg(valorDeBuyout) FROM Contrato;

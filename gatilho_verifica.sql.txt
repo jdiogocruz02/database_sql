@@ -1,0 +1,1 @@
+INSERT INTO Jogador values (64, 'VSKI', 15, 'Jungle', 'Russia',12);

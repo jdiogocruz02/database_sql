@@ -1,0 +1,8 @@
+
+
+
+SELECT DISTINCT killer, killed
+FROM Evento,Pvp,Objetivo,Pausa,Jogo
+WHERE Evento.idEvento = Pvp.idEvento
+AND Evento.idJogo = Jogo.idJogo
+AND Jogo.vencedor = 'T1' OR Jogo.perdedor = 'T1';

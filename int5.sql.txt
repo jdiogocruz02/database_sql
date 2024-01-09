@@ -1,0 +1,10 @@
+
+.mode columns
+.headers on
+.nullvalue NULL
+
+SELECT nome, minionScore 
+From Jogador,Pve
+Where Jogador.idJogador = Pve.idJogador
+AND minionScore <= 254
+AND minionScore >= 69;

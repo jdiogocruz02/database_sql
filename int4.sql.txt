@@ -1,0 +1,18 @@
+
+
+.mode columns
+.headers on
+.nullvalue NULL
+
+ 
+SELECT DISTINCT Jogador.nome
+FROM Jogador,Equipa
+WHERE Jogador.idEquipa = Equipa.idEquipa
+AND Equipa.nome = 'G2 Esports'
+
+UNION
+
+SELECT DISTINCT CoachingStaff.nome
+FROM CoachingStaff,Equipa
+WHERE CoachingStaff.idEquipa = Equipa.idEquipa
+AND Equipa.nome = 'G2 Esports';

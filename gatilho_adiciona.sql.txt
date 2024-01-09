@@ -1,0 +1,17 @@
+.mode columns
+.header on
+.nullvalue NULL
+
+PRAGMA foreign_keys = ON;
+
+-- Impede que seja adicionado um jogador com menos de 16 anos de idade
+
+CREATE TRIGGER IF NOT EXISTS InsertValidAge
+BEFORE INSERT ON Jogador
+FOR EACH ROW
+WHEN idade < 16
+BEGIN
+    SELECT RAISE(ROLLBACK, 'Jogador precisa de possuir uma idade superior a 16 anos, tente daqui a uns anos!');
+END;
+
+

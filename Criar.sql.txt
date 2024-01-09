@@ -1,0 +1,211 @@
+DROP TABLE IF EXISTS Liga;
+
+CREATE TABLE Liga (
+
+	idLiga INTEGER,
+	regiao TEXT NOT NULL 
+                    UNIQUE,
+	nome TEXT NOT NULL
+		  UNIQUE,
+	CONSTRAINT LigaPK PRIMARY KEY (idLiga)
+);
+
+DROP TABLE IF EXISTS Competicao;
+
+CREATE TABLE Competicao (
+
+	idCompeticao INTEGER,
+	tipo TEXT NOT NULL,
+	idLiga INTEGER REFERENCES Liga(idLiga) ON DELETE CASCADE
+                                               ON UPDATE CASCADE,
+	CONSTRAINT CompPK PRIMARY KEY (idCompeticao)
+);
+
+DROP TABLE IF EXISTS Calendario;
+
+CREATE TABLE Calendario (
+
+	idCalendario INTEGER,
+	data DATE NOT NULL,
+	ComentatorCast TEXT NOT NULL,
+	idJogo INTEGER REFERENCES Jogo(idJogo) ON DELETE CASCADE
+                                               ON UPDATE CASCADE,
+	CONSTRAINT CalPK PRIMARY KEY (idCalendario)
+);
+
+
+DROP TABLE IF EXISTS Classificacao; 
+
+CREATE TABLE Classificacao (
+
+	idClassificacao INTEGER,
+	nºvitorias INTEGER CONSTRAINT vitnn CHECK(nºvitorias <> 0 AND nºderrotas<>0 OR nºvitorias = 0 AND nºderrotas <> 0 OR nºvitorias <> 0 AND nºderrotas = 0),
+	nºderrotas INTEGER CONSTRAINT dernn CHECK(nºvitorias <> 0 AND nºderrotas<>0 OR nºvitorias = 0 AND nºderrotas <> 0 OR nºvitorias <> 0 AND nºderrotas = 0),
+	idEquipa INTEGER REFERENCES Equipa(idEquipa) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	CONSTRAINT ClassPK PRIMARY KEY (idClassificacao)
+);
+
+
+DROP TABLE IF EXISTS Patrocinio;
+
+CREATE TABLE Patrocinio (
+
+	idPatrocinio INTEGER,
+	marca TEXT NOT NULL
+                   UNIQUE,
+	idEquipa INTEGER REFERENCES Equipa(idEquipa) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	CONSTRAINT PatPK PRIMARY KEY (idPatrocinio)
+);
+
+
+DROP TABLE IF EXISTS Jogo;
+
+CREATE TABLE Jogo (
+
+	idJogo INTEGER,
+	resultado TEXT NOT NULL,	
+	vencedor TEXT NOT NULL CONSTRAINT resd CHECK(vencedor <> perdedor),
+	perdedor TEXT NOT NULL CONSTRAINT perd CHECK(perdedor <> vencedor),
+	CONSTRAINT JogoPK PRIMARY KEY (idJogo)
+);
+
+
+DROP TABLE IF EXISTS Equipa;
+
+CREATE TABLE Equipa (
+
+	idEquipa INTEGER,
+	nome TEXT NOT NULL
+                  UNIQUE,
+	anoDeFundacao DATE NOT NULL,
+	localizacao TEXT NOT NULL,
+	CONSTRAINT TeamPK PRIMARY KEY (idEquipa)
+);
+
+
+DROP TABLE IF EXISTS Jogador;
+
+CREATE TABLE Jogador (
+
+	idJogador INTEGER,
+	nome TEXT NOT NULL
+                  UNIQUE,
+	idade INTEGER NOT NULL,
+	lane TEXT NOT NULL,
+	nacionalidade TEXT NOT NULL,
+	idEquipa INTEGER REFERENCES Equipa(idEquipa) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	CONSTRAINT JogadorPK PRIMARY KEY (idJogador)
+);
+
+
+DROP TABLE IF EXISTS CoachingStaff;
+
+CREATE TABLE CoachingStaff (
+
+	idCoachingStaff INTEGER,
+	idade INTEGER NOT NULL,
+	nome TEXT NOT NULL
+                  UNIQUE,
+	nacionalidade TEXT NOT NULL,
+	especializacao TEXT NOT NULL,
+	idEquipa INTEGER REFERENCES Equipa(idEquipa) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	idContrato INTEGER REFERENCES Contrato(idContrato) ON DELETE CASCADE
+                                                           ON UPDATE CASCADE,
+	CONSTRAINT CoachPK PRIMARY KEY (idCoachingStaff)
+);
+
+
+DROP TABLE IF EXISTS Contrato;
+
+CREATE TABLE Contrato (
+
+	idContrato INTEGER,
+	valorDeBuyout INTEGER NOT NULL,
+	dataDeExpiracao DATE NOT NULL,
+	idJogador INTEGER REFERENCES Jogador(idJogador) ON DELETE CASCADE
+                                                        ON UPDATE CASCADE,
+	idCoachingStaff INTEGER REFERENCES CoachingStaff(idCoachingStaff) ON DELETE CASCADE
+                                                                          ON UPDATE CASCADE,
+	idEpocaDeTransferencia INTEGER REFERENCES EpocaDeTransferencia(idEpocaDeTransferencia) ON DELETE CASCADE
+                                                                                               ON UPDATE CASCADE,
+	CONSTRAINT ContratoPK PRIMARY KEY (idContrato)
+);
+
+
+DROP TABLE IF EXISTS EpocaDeTransferencia;
+
+CREATE TABLE EpocaDeTransferencia (
+
+	idEpocaDeTransferencia,
+	data DATE NOT NULL,
+	CONSTRAINT EdTPK PRIMARY KEY (idEpocaDeTransferencia)
+);
+
+
+DROP TABLE IF EXISTS Evento;
+
+CREATE TABLE Evento (
+
+	idEvento INTEGER,
+	tempo HOUR NOT NULL,
+	idJogo INTEGER REFERENCES Jogo(idJogo) ON DELETE CASCADE
+                                               ON UPDATE CASCADE,
+	CONSTRAINT EPK PRIMARY KEY (idEvento)
+);
+
+
+DROP TABLE IF EXISTS Objetivo;
+
+CREATE TABLE Objetivo (
+	
+	idEvento INTEGER REFERENCES Evento(idEvento) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	idEquipa INTEGER REFERENCES Equipa(idEquipa) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	nome TEXT NOT NULL CONSTRAINT name CHECK(nome = “Drake” OR nome = “Nashor” OR nome = “Tower” OR nome = “Inhibitor” OR nome= ”Nexus”),
+	CONSTRAINT idEventoOPK PRIMARY KEY (idEvento)
+);
+
+
+DROP TABLE IF EXISTS Pvp;
+
+CREATE TABLE Pvp (
+	
+	idEvento INTEGER REFERENCES Evento(idEvento) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	killer TEXT NOT NULL CONSTRAINT killr CHECK(killer <> killed),
+	killed TEXT NOT NULL CONSTRAINT kill CHECK(killed <> killer),
+	CONSTRAINT idEventoPPK PRIMARY KEY (idEvento)
+);
+
+
+DROP TABLE IF EXISTS Pausa;
+
+CREATE TABLE Pausa (
+
+	idEvento INTEGER REFERENCES Evento(idEvento) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	razao TEXT NOT NULL,
+	duracao INTEGER NOT NULL,
+	idEquipa INTEGER REFERENCES Equipa(idEquipa) ON DELETE CASCADE
+                                                     ON UPDATE CASCADE,
+	CONSTRAINT idEventoPaPK PRIMARY KEY (idEvento)
+);
+
+
+DROP TABLE IF EXISTS Pve;
+
+
+CREATE TABLE Pve (
+
+	idPve INTEGER,
+	minionScore INTEGER NOT NULL,
+	idJogador INTEGER REFERENCES Jogador(idJogador) ON DELETE CASCADE
+                                                        ON UPDATE CASCADE,
+	CONSTRAINT MinionPK PRIMARY KEY (idPve)
+);
+
